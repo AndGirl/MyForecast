@@ -1,9 +1,12 @@
 package com.atguigu.myforecast.util;
 
 import android.text.TextUtils;
+
 import com.atguigu.myforecast.db.City;
 import com.atguigu.myforecast.db.County;
 import com.atguigu.myforecast.db.Province;
+import com.atguigu.myforecast.gson.Weather;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +18,24 @@ import org.json.JSONObject;
  */
 
 public class ParseJsonUtil {
+
+    /**
+     * 将返回的JSON数据解析成Weather实体类
+     * @param response
+     * @return
+     */
+    public static Weather handleWeatherResponse(String response){
+        try{
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray heWeather = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = heWeather.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * 解析和处理服务器返回的省级数据
      * @param response

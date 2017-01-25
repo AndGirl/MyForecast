@@ -24,14 +24,14 @@ public class Forecast {
 
     private AstroBean astro;
     @SerializedName("cond")
-    private CondBean more;
-    private String date;
+    public CondBean more;
+    public String date;
     private String hum;
     private String pcpn;
     private String pop;
     private String pres;
     @SerializedName("tmp")
-    private TmpBean temprature;
+    public TmpBean temprature;
     private String uv;
     private String vis;
     private WindBean wind;
@@ -181,7 +181,7 @@ public class Forecast {
         private String code_d;
         private String code_n;
         @SerializedName("txt_d")
-        private String info;
+        public String info;
         private String txt_n;
 
         public String getCode_d() {
@@ -223,8 +223,8 @@ public class Forecast {
          * min : -4
          */
 
-        private String max;
-        private String min;
+        public String max;
+        public String min;
 
         public String getMax() {
             return max;

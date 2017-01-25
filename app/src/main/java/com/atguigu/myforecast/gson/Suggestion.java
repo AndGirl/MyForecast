@@ -21,12 +21,12 @@ public class Suggestion {
 
     private AirBean air;
     @SerializedName("comf")
-    private ComfBean comfort;
+    public ComfBean comfort;
     @SerializedName("cw")
-    private CwBean carWash;
+    public CwBean carWash;
     private DrsgBean drsg;
     private FluBean flu;
-    private SportBean sport;
+    public SportBean sport;
     private TravBean trav;
     private UvBean uv;
 
@@ -101,7 +101,8 @@ public class Suggestion {
          */
 
         private String brf;
-        private String txt;
+        @SerializedName("txt")
+        public String info;
 
         public String getBrf() {
             return brf;
@@ -111,13 +112,6 @@ public class Suggestion {
             this.brf = brf;
         }
 
-        public String getTxt() {
-            return txt;
-        }
-
-        public void setTxt(String txt) {
-            this.txt = txt;
-        }
     }
 
     public static class ComfBean {
@@ -127,7 +121,8 @@ public class Suggestion {
          */
 
         private String brf;
-        private String txt;
+        @SerializedName("txt")
+        public String info;
 
         public String getBrf() {
             return brf;
@@ -137,13 +132,6 @@ public class Suggestion {
             this.brf = brf;
         }
 
-        public String getTxt() {
-            return txt;
-        }
-
-        public void setTxt(String txt) {
-            this.txt = txt;
-        }
     }
 
     public static class CwBean {
@@ -153,7 +141,8 @@ public class Suggestion {
          */
 
         private String brf;
-        private String txt;
+        @SerializedName("txt")
+        public String info;
 
         public String getBrf() {
             return brf;
@@ -163,13 +152,6 @@ public class Suggestion {
             this.brf = brf;
         }
 
-        public String getTxt() {
-            return txt;
-        }
-
-        public void setTxt(String txt) {
-            this.txt = txt;
-        }
     }
 
     public static class DrsgBean {
@@ -231,7 +213,8 @@ public class Suggestion {
          */
 
         private String brf;
-        private String txt;
+        @SerializedName("txt")
+        public String info;
 
         public String getBrf() {
             return brf;
@@ -241,13 +224,6 @@ public class Suggestion {
             this.brf = brf;
         }
 
-        public String getTxt() {
-            return txt;
-        }
-
-        public void setTxt(String txt) {
-            this.txt = txt;
-        }
     }
 
     public static class TravBean {

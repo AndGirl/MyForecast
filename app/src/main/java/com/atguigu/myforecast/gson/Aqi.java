@@ -10,7 +10,7 @@ public class Aqi {
      * city : {"aqi":"207","co":"3","no2":"83","o3":"38","pm10":"156","pm25":"157","qlty":"重度污染","so2":"45"}
      */
 
-    private CityBean city;
+    public CityBean city;
 
     public CityBean getCity() {
         return city;
@@ -32,12 +32,12 @@ public class Aqi {
          * so2 : 45
          */
 
-        private String aqi;
+        public String aqi;
         private String co;
         private String no2;
         private String o3;
         private String pm10;
-        private String pm25;
+        public String pm25;
         private String qlty;
         private String so2;
 

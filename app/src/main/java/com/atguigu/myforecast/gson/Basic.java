@@ -17,13 +17,13 @@ public class Basic {
      * update : {"loc":"2017-01-25 14:51","utc":"2017-01-25 06:51"}
      */
     @SerializedName("city")
-    private String cityName;
+    public String cityName;
     private String cnty;
     @SerializedName("id")
-    private String weatherId;
+    public String weatherId;
     private String lat;
     private String lon;
-    private UpdateBean update;
+    public UpdateBean update;
 
     public String getCityName() {
         return cityName;
@@ -79,7 +79,7 @@ public class Basic {
          * utc : 2017-01-25 06:51
          */
         @SerializedName("loc")
-        private String updateTime;
+        public String updateTime;
         private String utc;
 
         public String getUpdateTime() {

@@ -19,13 +19,13 @@ public class Now {
      * wind : {"deg":"122","dir":"东北风","sc":"3-4","spd":"12"}
      */
     @SerializedName("cond")
-    private CondBean more;
+    public CondBean more;
     private String fl;
     private String hum;
     private String pcpn;
     private String pres;
     @SerializedName("tmp")
-    private String temperature;
+    public String temperature;
     private String vis;
     private WindBean wind;
 
@@ -101,7 +101,7 @@ public class Now {
 
         private String code;
         @SerializedName("txt")
-        private String info;
+        public String info;
 
         public String getCode() {
             return code;
