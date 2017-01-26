@@ -3,6 +3,7 @@ package com.atguigu.myforecast;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 
 import com.atguigu.myforecast.util.CacheUtil;
 
@@ -22,6 +23,10 @@ import org.litepal.LitePalApplication;
  * http://guolin.tech/api/weather?cityid=CN101190401&key=13a5b26db2e74496a113ccf19c9503fa
  * cityid就是待查看城市的weather_id,key部分填入的就是我们申请到的API Key
  *
+ * 图片链接：
+ * http://guolin.tech/api/bing_pic
+ * http://cn.bing.com/az/hprichbg/rb/DovrefjellMuskox_ZH-CN14069563613_1920x1080.jpg
+ *
  * GitHub地址:
  * https://github.com/AndGirl/forecastweather.git
  */
@@ -32,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         String weather = CacheUtil.getString(LitePalApplication.getContext(), "weather");
-        if(weather != null) {
+        if(!TextUtils.isEmpty(weather)) {
             //让用户不用在跳转到选择城市页面
             Intent intent = new Intent(this, WeatherActivity.class);
             startActivity(intent);

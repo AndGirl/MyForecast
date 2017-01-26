@@ -1,10 +1,14 @@
 package com.atguigu.myforecast;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -17,6 +21,7 @@ import com.atguigu.myforecast.util.Constants;
 import com.atguigu.myforecast.util.HttpUtil;
 import com.atguigu.myforecast.util.LogUtil;
 import com.atguigu.myforecast.util.ParseJsonUtil;
+import com.bumptech.glide.Glide;
 
 import org.litepal.LitePalApplication;
 
@@ -52,12 +57,45 @@ public class WeatherActivity extends AppCompatActivity {
 
     private TextView sportText;
 
+    private ImageView bingPicImg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //让状态栏融为一体
+        if(Build.VERSION.SDK_INT >= 21) {
+            View dectorView = getWindow().getDecorView();
+            dectorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
         setContentView(R.layout.activity_weather);
+        //让状态栏融为一体
 
         //初始化各个控件
+        initView();
+
+        //缓存到本地
+        String weatherString = CacheUtil.getString(LitePalApplication.getContext(), "weather");
+        if(weatherString != null && !TextUtils.isEmpty(weatherString)) {
+            //有缓存时直接解析天气数据
+            LogUtil.e("111","=============="+weatherString);
+            Weather weather = ParseJsonUtil.handleWeatherResponse(weatherString);
+            showWeatherInfo(weather);
+        }else{
+            //无缓存的时候去服务器查询天气
+            String weatherId = getIntent().getStringExtra(Constants.WEATHER_ID);
+            weatherLayout.setVisibility(View.INVISIBLE);
+            requestWeather(weatherId);
+        }
+
+        showImage();
+    }
+
+    /**
+     * 初始化控件
+     */
+    private void initView() {
+        bingPicImg = (ImageView)findViewById(R.id.bing_pic_img);
         weatherLayout = (ScrollView) findViewById(R.id.weather_layout);
         titleCity = (TextView) findViewById(R.id.title_city);
         titleUpdateTime = (TextView) findViewById(R.id.title_update_time);
@@ -70,20 +108,43 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText = (TextView) findViewById(R.id.car_wash_text);
         sportText = (TextView) findViewById(R.id.sport_text);
         navButton = (Button) findViewById(R.id.back_button);
+    }
 
-        //缓存到本地
-        String weatherString = CacheUtil.getString(LitePalApplication.getContext(), "weather");
-        if(weatherString != null) {
-            //有缓存时直接解析天气数据
-            LogUtil.e("111","=============="+weatherString);
-            Weather weather = ParseJsonUtil.handleWeatherResponse(weatherString);
-            showWeatherInfo(weather);
+    /**
+     * 展示图片
+     */
+    private void showImage() {
+        String bingPic = CacheUtil.getString(LitePalApplication.getContext(), "bing_pic");
+        if(bingPic != null) {
+            Glide.with(this).load(bingPic).into(bingPicImg);
         }else{
-            //无缓存的时候去服务器查询天气
-            String weatherId = getIntent().getStringExtra(Constants.WEATHER_ID);
-            weatherLayout.setVisibility(View.INVISIBLE);
-            requestWeather(weatherId);
+            loadBingPic();
         }
+    }
+
+    /**
+     * 联网显示图片
+     */
+    private void loadBingPic() {
+        String requestBingPic = Constants.BASE_IMAGE;
+        HttpUtil.sendOkHttpRequest(requestBingPic, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Toast.makeText(WeatherActivity.this, "图片进入黑洞了...", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String bingPic = response.body().string();
+                CacheUtil.saveString(LitePalApplication.getContext(),"bing_pic",bingPic);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(WeatherActivity.this).load(bingPic).into(bingPicImg);
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -112,7 +173,6 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if(weather != null && "ok".equals(weather.status)) {
-                            LogUtil.v("text",responseText + "=========================");
                             CacheUtil.saveString(LitePalApplication.getContext(),"weather",responseText);
                             showWeatherInfo(weather);
                         }else{
@@ -122,6 +182,7 @@ public class WeatherActivity extends AppCompatActivity {
                 });
             }
         });
+        loadBingPic();
     }
 
     /**
