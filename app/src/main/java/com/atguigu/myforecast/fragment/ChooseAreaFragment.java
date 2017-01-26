@@ -230,9 +230,9 @@ public class ChooseAreaFragment extends Fragment{
                 if("province".equals(type)) {
                     result = ParseJsonUtil.handleProvinceResponse(responseText);
                 } else if ("city".equals(type)) {
-                    result = ParseJsonUtil.handleCityResponse(responseText, (int) selectedProvince.getId());
+                    result = ParseJsonUtil.handleCityResponse(responseText, selectedProvince.getId());
                 } else if ("county".equals(type)) {
-                    result = ParseJsonUtil.handleCountyResponse(responseText, (int) selectedCity.getId());
+                    result = ParseJsonUtil.handleCountyResponse(responseText,selectedCity.getId());
                 }
                 if(result) {
                     getActivity().runOnUiThread(new Runnable() {

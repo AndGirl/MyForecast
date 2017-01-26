@@ -3,9 +3,10 @@ package com.atguigu.myforecast;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 
 import com.atguigu.myforecast.util.CacheUtil;
+
+import org.litepal.LitePalApplication;
 
 /**
  * 需求：(接口采用和风天气)
@@ -30,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String weather = CacheUtil.getString(MyApplication.getmContext(), "weather");
-        if(!TextUtils.isEmpty(weather)) {
+        String weather = CacheUtil.getString(LitePalApplication.getContext(), "weather");
+        if(weather != null) {
             //让用户不用在跳转到选择城市页面
             Intent intent = new Intent(this, WeatherActivity.class);
             startActivity(intent);

@@ -28,6 +28,7 @@ public class CacheUtil {
      */
     public static void saveString(Context context, String key,String value) {
         SharedPreferences sp = context.getSharedPreferences("forecast",Context.MODE_PRIVATE);
-        sp.edit().putString(key,value).commit();
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(key,value).commit();
     }
 }

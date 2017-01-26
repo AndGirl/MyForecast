@@ -15,7 +15,10 @@ import com.atguigu.myforecast.gson.Weather;
 import com.atguigu.myforecast.util.CacheUtil;
 import com.atguigu.myforecast.util.Constants;
 import com.atguigu.myforecast.util.HttpUtil;
+import com.atguigu.myforecast.util.LogUtil;
 import com.atguigu.myforecast.util.ParseJsonUtil;
+
+import org.litepal.LitePalApplication;
 
 import java.io.IOException;
 
@@ -69,9 +72,10 @@ public class WeatherActivity extends AppCompatActivity {
         navButton = (Button) findViewById(R.id.back_button);
 
         //缓存到本地
-        String weatherString = CacheUtil.getString(MyApplication.getmContext(), "weather");
+        String weatherString = CacheUtil.getString(LitePalApplication.getContext(), "weather");
         if(weatherString != null) {
             //有缓存时直接解析天气数据
+            LogUtil.e("111","=============="+weatherString);
             Weather weather = ParseJsonUtil.handleWeatherResponse(weatherString);
             showWeatherInfo(weather);
         }else{
@@ -108,7 +112,9 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if(weather != null && "ok".equals(weather.status)) {
-                            CacheUtil.saveString(MyApplication.getmContext(),"weather",responseText);
+                            LogUtil.v("text",responseText + "=========================");
+                            CacheUtil.saveString(LitePalApplication.getContext(),"weather",responseText);
+                            showWeatherInfo(weather);
                         }else{
                             Toast.makeText(WeatherActivity.this, "亲，地址丢失或不存在...", Toast.LENGTH_SHORT).show();
                         }
@@ -121,7 +127,7 @@ public class WeatherActivity extends AppCompatActivity {
     /**
      * 处理并展示数据(Weather类)
      * @param weather
-     */
+    */
     private void showWeatherInfo(Weather weather){
         String cityName = weather.basic.cityName;
         String updateTime = weather.basic.update.updateTime.split(" ")[1];
