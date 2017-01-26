@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.atguigu.myforecast.MainActivity;
 import com.atguigu.myforecast.R;
 import com.atguigu.myforecast.WeatherActivity;
 import com.atguigu.myforecast.db.City;
@@ -107,11 +108,20 @@ public class ChooseAreaFragment extends Fragment{
                     queryCounties();
                 }else if(currentLevel == LEVEL_COUNTY){
                     String weatherId = countyList.get(position).getWeatherId();
-                    LogUtil.e("编号","================ " + weatherId);
-                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                    intent.putExtra(Constants.WEATHER_ID,weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                    if(getActivity() instanceof MainActivity) {
+                        LogUtil.e("编号","================ " + weatherId);
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra(Constants.WEATHER_ID,weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if(getActivity() instanceof  WeatherActivity) {
+                        //实现关闭侧滑列表和停止刷新的方法
+                        WeatherActivity activity = (WeatherActivity) getActivity();
+                        activity.drawerLayout.closeDrawers();
+                        activity.swipeRefresh.setRefreshing(false);
+                        activity.requestWeather(weatherId);
+                    }
+
                 }
             }
         });
